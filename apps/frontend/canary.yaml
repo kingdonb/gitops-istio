@@ -31,17 +31,12 @@ spec:
     interval: 15s
     # max number of failed metric checks before rollback
     threshold: 10
-    # total number of iterations
-    iterations: 10
-    # canary match condition
-    match:
-      - headers:
-          user-agent:
-            regex: ".*Firefox.*"
-            #regex: "^(?!.*(?:Chrome|Edge)).*Safari"
-      - headers:
-          cookie:
-            regex: "^(.*?;)?(type=insider)(;.*)?$"
+    # max traffic percentage routed to canary
+    # percentage (0-100)
+    maxWeight: 50
+    # canary increment step
+    # percentage (0-100)
+    stepWeight: 5
     # Istio Prometheus checks
     metrics:
       - name: error-rate
@@ -72,4 +67,6 @@ spec:
         timeout: 15s
         url: http://flagger-loadtester.prod/
         metadata:
-          cmd: "hey -z 1m -q 10 -c 2 -H 'Cookie: type=insider' http://istio-gateway.istio-system/"
+          type: cmd
+          cmd: "hey -z 1m -q 10 -c 2 http://frontend-canary.prod:9898/"
+          logCmdOutput: "true"
