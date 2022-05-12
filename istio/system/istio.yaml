@@ -51,6 +51,9 @@ spec:
         name: istio
   interval: 1h0m0s
   values:
+    global:
+      hub: ghcr.io/resf/istio
+      tag: 1.13.3
     pilot:
       autoscaleEnabled: false
       resources:
